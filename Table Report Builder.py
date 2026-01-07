@@ -97,13 +97,22 @@ def main():
     cols1 = doc1.columns
     cols2 = doc2.columns
 
+    print('Converting NaN, Null, or None                                                              ', end='\r')
+    doc1.fillna('NULL', inplace=True)
+    doc2.fillna('NULL', inplace=True)
+
+    for i in cols1:
+        doc1[i] = doc1[i].astype('string')
+    for i in cols2:
+        doc2[i] = doc2[i].astype('string')
+
     print("Collecting Data from file 1                                                                ", end="\r")
     rows1 = [[doc1.iloc[i][j] for j in cols1] for i in (range(len(doc1)) if len(doc1) <= LINE_LIMIT else range(LINE_LIMIT))]
     print("Collecting Data from file 2                                                                ", end="\r")
     rows2 = [[doc2.iloc[i][j] for j in cols2] for i in (range(len(doc2)) if len(doc2) <= LINE_LIMIT else range(LINE_LIMIT))]
 
-    rows1_str = ["".join(str(row)) for row in rows1]
-    rows2_str = ["".join(str(row)) for row in rows2]
+    rows1_str = [" ".join(str(row)) for row in rows1]
+    rows2_str = [" ".join(str(row)) for row in rows2]
 
     # Row comparison
 
