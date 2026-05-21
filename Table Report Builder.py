@@ -796,15 +796,15 @@ def main():
                 f"<p>Total Rows in Table 2: {len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit}</p>",
 
                 # What percent of rows from table 1 exist in table 2 (Before reordering or using only shared columns)
-                f"<p> Raw percent of rows in {filename1} that are in {filename2}: {round((raw_yes1 / (len(doc1) if len(doc1) <= line_limit or line_limit == 0 else line_limit)) * 100, 2)}%</p>",
-                f"<p> Raw percent of rows in {filename2} that are in {filename1}: {round((raw_yes2 / (len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit)) * 100, 2)}%</p>",
+                f"<p> Raw percent of rows in {filename1} that are in {filename2}: {int((raw_yes1 / (len(doc1) if len(doc1) <= line_limit or line_limit == 0 else line_limit)) * 10000)/100}%</p>",
+                f"<p> Raw percent of rows in {filename2} that are in {filename1}: {int((raw_yes2 / (len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit)) * 10000)/100}%</p>",
 
                 # Number of columns in common
                 f"<p> Number of columns in common: {len(same_columns)}</p>",
 
                 # What percent of rows from table 1 exist in table 2 (After reordering or using only shared columns)
-                f"<p> Percent of rows in reordered {filename1} that are in reordered {filename2}: {round((swap_yes1 / (len(doc1) if len(doc1) <= line_limit or line_limit == 0 else line_limit)) * 100, 2)}%</p>",
-                f"<p> Percent of rows in reordered {filename2} that are in reordered {filename1}: {round((swap_yes2 / (len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit)) * 100, 2)}%</p>",
+                f"<p> Percent of rows in reordered {filename1} that are in reordered {filename2}: {int((swap_yes1 / (len(doc1) if len(doc1) <= line_limit or line_limit == 0 else line_limit)) * 10000)/100}%</p>",
+                f"<p> Percent of rows in reordered {filename2} that are in reordered {filename1}: {int((swap_yes2 / (len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit)) * 10000)/100}%</p>",
 
                 "</div>",
 
@@ -880,7 +880,7 @@ def main():
                 f"<p class=\"indent\">Number of rows from {filename1} that do not appear in {filename2} -- {raw_no1}</p>",
 
                 # Percent of rows in table 1 that are in table 2                               ( Number of rows from table 1 that appear in table 2  /  total number of rows in table 1 ) * 100, rounded to 2 decimals
-                f"<p class=\"indent\"> Percent of rows in {filename1} that are in {filename2}: {round((raw_yes1 / (len(doc1) if len(doc1) <= line_limit or line_limit == 0 else line_limit)) * 100, 2)}%</p>",
+                f"<p class=\"indent\"> Percent of rows in {filename1} that are in {filename2}: {int((raw_yes1 / (len(doc1) if len(doc1) <= line_limit or line_limit == 0 else line_limit)) * 10000)/100}%</p>",
                 
                 # Show the rows from table 1 that do not appear in table 2
                 f"<p class=\"indent\"> Rows from {filename1} that do not appear in {filename2}</p>",
@@ -905,7 +905,7 @@ def main():
                 f"<p  class=\"indent\">Number of rows from {filename2} that do not appear in {filename1} -- {raw_no2}</p>",
 
                 # Percent of rows in table 1 that are in table 2                               ( Number of rows from table 1 that appear in table 2  /  total number of rows in table 1 ) * 100, rounded to 2 decimals
-                f"<p class=\"indent\"> Percent of rows in {filename2} that are in {filename1}: {round((raw_yes2 / (len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit)) * 100, 2)}%</p>",
+                f"<p class=\"indent\"> Percent of rows in {filename2} that are in {filename1}: {int((raw_yes2 / (len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit)) * 10000)/100}%</p>",
                 
                 # Show rows from table 2 that do not appear in table 1
                 f"<p class=\"indent\"> Rows from {filename2} that do not appear in {filename1}</p>",
@@ -957,7 +957,7 @@ def main():
                 # Number of rows from reordered table 1 that do not appear in reordered table 2
                 f"<p class=\"indent\">Number of rows from reordered {filename1} that do not appear in reordered {filename2} -- {swap_no1}</p>",
                 # Percent of rows in table 1 that are in table 2                                                       ( Number of rows from table 1 that appear in table 2  /  total number of rows in table 1 ) * 100, rounded to 2 decimals
-                f"<p class=\"indent\"> Percent of rows in reordered {filename1} that are in reordered {filename2}: {round((swap_yes1 / (len(doc1) if len(doc1) <= line_limit or line_limit == 0 else line_limit)) * 100, 2)}%</p>",
+                f"<p class=\"indent\"> Percent of rows in reordered {filename1} that are in reordered {filename2}: {int((swap_yes1 / (len(doc1) if len(doc1) <= line_limit or line_limit == 0 else line_limit)) * 10000)/100}%</p>",
                 f"<p class=\"indent\"> Rows from reordered {filename1} that do not appear in reordered {filename2}</p>",
                 "<table class=\"sectionend indent\"><tr><th>Row</th>",
                 # Show rows from reordered table 2 that do not appear in reordered table 1
@@ -977,7 +977,7 @@ def main():
                 # Number of rows from reordered table 2 that do not appear in reordered table 1
                 f"<p class=\"indent\" >Number of rows from reordered {filename2} that do not appear in reordered {filename1} -- {swap_no2}</p>",
                 # Percent of rows in table 2 that are in table 1                                                       ( Number of rows from table 1 that appear in table 2  /  total number of rows in table 1 ) * 100, rounded to 2 decimals
-                f"<p class=\"indent\"> Percent of rows in reordered {filename2} that are in reordered {filename1}: {round((swap_yes2 / (len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit)) * 100, 2)}%</p>",
+                f"<p class=\"indent\"> Percent of rows in reordered {filename2} that are in reordered {filename1}: {int((swap_yes2 / (len(doc2) if len(doc2) <= line_limit or line_limit == 0 else line_limit)) * 10000)/100}%</p>",
                 f"<p class=\"indent\"> Rows from reordered {filename2} that do not appear in reordered {filename1}</p>",
                 "<table class=\"sectionend indent\"><tr><th>Row</th>",
                 # Show rows from reordered table 2 that do not appear in reordered table 1
