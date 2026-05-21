@@ -15,7 +15,7 @@ from subprocess import run
 # Turn on or off multiprocessing
 USE_MULTICORE_PROCESSING = False if sum([0 if i.lower() not in sys.argv else 1 for i in ['-n', '-multioff', '--n', '--multioff', '/n', '/multioff', 'n', 'multioff']]) > 0 else True
 USE_STR_CONVERSION = False if sum([0 if i.lower() not in sys.argv else 1 for i in ['-nc', '-noconvert', '--nc', '--noconvert', 'nc', 'noconvert']]) > 0 else True
-USE_CASE_INSENSITIVE = False if sum([0 if i.lower() not in sys.argv else 1 for i in ['-c', '-case', '--c', '--case', 'c', 'case']]) > 0 else True
+USE_CASE_INSENSITIVE = True if sum([0 if i.lower() not in sys.argv else 1 for i in ['-c', '-case', '--c', '--case', 'c', 'case']]) > 0 else False
 
 received_number: int = 0
 
@@ -343,15 +343,15 @@ def main():
 
     # Pathway for using multiprocessing
     if multicore:
-        print("\x1b[32m*MULTIPROCESSING ENABLED\x1b[0m: Run Script with flag \'n\' or \'multioff\' to disable                         ")
+        print("\x1b[32m*MULTIPROCESSING ENABLED\x1b[0m: Run Script with flag \'-n\' or \'--multioff\' to disable                         ")
         if USE_STR_CONVERSION:
-            print("\x1b[32m*AUTO NUMBER CONVERSION ENABLED\x1b[0m: Run script with flag \'noconvert\' or \'nc\' to disable            ")
+            print("\x1b[32m*AUTO NUMBER CONVERSION ENABLED\x1b[0m: Run script with flag \'-nc\' or \'--noconvert\' to disable            ")
         else:
-            print("\x1b[31m*AUTO NUMBER CONVERSION DISABLED\x1b[0m: Run script without flags \'noconvert\' or \'nc\' to enable        ")
+            print("\x1b[31m*AUTO NUMBER CONVERSION DISABLED\x1b[0m: Run script without flags \'-nc\' or \'--noconvert\' to enable        ")
         if USE_CASE_INSENSITIVE:
-            print("\x1b[32m*CASE INSENSITIVITY ENABLED\x1b[0m: Run script with flag \'c\' or \'case\' to disable                      ")
+            print("\x1b[32m*CASE INSENSITIVITY ENABLED\x1b[0m: Run script without flags \'c\' or \'case\' to disable                     ")
         else:
-            print("\x1b[31m*CASE INSENSITIVITY DISABLED\x1b[0m: Run script without flags \'c\' or \'case\' to enable                  ")
+            print("\x1b[31m*CASE INSENSITIVITY DISABLED\x1b[0m: Run script with flag \'c\' or \'case\' to enable                         ")
         print()
         print("Reading data from files                                                                    ", end="\r")
 
@@ -516,16 +516,16 @@ def main():
 
     # Pathway if multiprocessing is not used
     else:
-        print("\x1b[31m*MULTIPROCESSING DISABLED OR UNAVAILABLE: Run script without flags to enable\x1b[0m               ")
-        print("\x1b[31m**not available if system only has 1 processor\x1b[0m                                             \n")
+        print("\x1b[31m*MULTIPROCESSING DISABLED OR UNAVAILABLE: Run script without flags to enable\x1b[0m                               ")
+        print("\x1b[31m**not available if system only has 1 processor\x1b[0m                                                             \n")
         if USE_STR_CONVERSION:
-            print("\x1b[32m*AUTO NUMBER CONVERSION ENABLED\x1b[0m: Run script with flag \'noconvert\' or \'nc\' to disable            ")
+            print("\x1b[32m*AUTO NUMBER CONVERSION ENABLED\x1b[0m: Run script with flag \'-nc\' or \'--noconvert\' to disable            ")
         else:
-            print("\x1b[31m*AUTO NUMBER CONVERSION DISABLED\x1b[0m: Run script without flags \'noconvert\' or \'nc\' to enable                     ")
+            print("\x1b[31m*AUTO NUMBER CONVERSION DISABLED\x1b[0m: Run script without flags \'-nc\' or \'--noconvert\' to enable        ")
         if USE_CASE_INSENSITIVE:
-            print("\x1b[32m*CASE INSENSITIVITY ENABLED\x1b[0m: Run script with flag \'c\' or \'case\' to disable                ")
+            print("\x1b[32m*CASE INSENSITIVITY ENABLED\x1b[0m: Run script without flags \'c\' or \'case\' to disable                     ")
         else:
-            print("\x1b[31m*CASE INSENSITIVITY DISABLED\x1b[0m: Run script without flags \'c\' or \'case\' to enable                         ")
+            print("\x1b[31m*CASE INSENSITIVITY DISABLED\x1b[0m: Run script with flag \'c\' or \'case\' to enable                         ")
         
         # Read File 1 into a Pandas DataFrame object
         doc1 = read_table_series(file1, extension1, "Reading data from file 1                                                                   ")
