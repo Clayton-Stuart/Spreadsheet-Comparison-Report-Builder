@@ -15,7 +15,7 @@ from subprocess import run
 # Turn on or off multiprocessing
 USE_MULTICORE_PROCESSING = False if sum([0 if i.lower() not in sys.argv else 1 for i in ['-n', '-multioff', '--n', '--multioff', '/n', '/multioff', 'n', 'multioff']]) > 0 else True
 USE_STR_CONVERSION = False if sum([0 if i.lower() not in sys.argv else 1 for i in ['-nc', '-noconvert', '--nc', '--noconvert', 'nc', 'noconvert']]) > 0 else True
-USE_CASE_INSENSITIVE = True if sum([0 if i.lower() not in sys.argv else 1 for i in ['-c', '-case', '--c', '--case', 'c', 'case']]) > 0 else False
+USE_CASE_INSENSITIVE = False if sum([0 if i.lower() not in sys.argv else 1 for i in ['-c', '-case', '--c', '--case', 'c', 'case']]) > 0 else True
 
 received_number: int = 0
 
@@ -175,18 +175,26 @@ def read_table_manager(file: str, extension: str, num: int, files_dict: dict[int
     files_dict[num] = read_table(file, extension)
 
 def row_comparison(rows1_str: list[str], rows2_str: list[str], message: str) -> tuple[int, int, list[int]]:
+    print(" "*50, end="\r")
     print(message, end="\r")
     # Find number of rows from raw document 1 that exist in raw document 2
     raw_idx1: list[int] = []
     raw_yes1: int = 0
     raw_no1: int = 0
+
+    total: int = len(rows1_str)
+    per_update_1: int = total // 100 if total // 100 != 0 else 1
+    start_pos = len(message)
+
     for i in range(len(rows1_str)):
+        _ = print_at_column(start_pos+3, f"\x1b[91m{int((i/total)*100)}%\x1b[0m") if i%per_update_1 == 0 else None
         if rows1_str[i] in rows2_str:
             raw_yes1 += 1
         else:
             raw_no1 += 1
             raw_idx1.append(i)
 
+    print_at_column(start_pos+3, f"\x1b[92m100%\x1b[0m")
     return (raw_yes1, raw_no1, raw_idx1)
 
 def row_comparision_multi(rows1_str: list[str], rows2_str: list[str], num: int, manager: dict[int, Any] | DictProxy[Any, Any]) -> None:
@@ -195,11 +203,10 @@ def row_comparision_multi(rows1_str: list[str], rows2_str: list[str], num: int, 
     raw_yes1: int = 0
     raw_no1: int = 0
     total: int = len(rows1_str)
-
     per_update_1: int = total // 100 if total // 100 != 0 else 1
 
     for i in range(total):
-        _ = print_at_column(19+num*20, ["r1 vs r2: ", "r2 vs r1: ", "o1 vs o2: ", "o2 vs o1: "][num] + "\x1b[91m" + str(int((i/total)*100)) + "\x1b[0m") if i%per_update_1 == 0 else None
+        _ = print_at_column(19+num*20, ["r1 vs r2: ", "r2 vs r1: ", "o1 vs o2: ", "o2 vs o1: "][num] + "\x1b[91m" + str(int((i/total)*100)) + "%\x1b[0m") if i%per_update_1 == 0 else None
         if rows1_str[i] in rows2_str:
             raw_yes1 += 1
         else:
@@ -336,15 +343,15 @@ def main():
 
     # Pathway for using multiprocessing
     if multicore:
-        print("\x1b[32m*MULTIPROCESSING ENABLED\x1b[0m: Run Script with flag \'n\' or \'multioff\' to disable            ")
+        print("\x1b[32m*MULTIPROCESSING ENABLED\x1b[0m: Run Script with flag \'n\' or \'multioff\' to disable                         ")
         if USE_STR_CONVERSION:
             print("\x1b[32m*AUTO NUMBER CONVERSION ENABLED\x1b[0m: Run script with flag \'noconvert\' or \'nc\' to disable            ")
         else:
-            print("\x1b[31m*AUTO NUMBER CONVERSION DISABLED\x1b[0m: Run script without flags to enable                     ")
+            print("\x1b[31m*AUTO NUMBER CONVERSION DISABLED\x1b[0m: Run script without flags \'noconvert\' or \'nc\' to enable        ")
         if USE_CASE_INSENSITIVE:
-            print("\x1b[32m*CASE INSENSITIVITY ENABLED\x1b[0m: Run script with flag \'c\' or \'case\' to disable             ")
+            print("\x1b[32m*CASE INSENSITIVITY ENABLED\x1b[0m: Run script with flag \'c\' or \'case\' to disable                      ")
         else:
-            print("\x1b[31m*CASE INSENSITIVITY DISABLED\x1b[0m: Run script without flags to enable                         ")
+            print("\x1b[31m*CASE INSENSITIVITY DISABLED\x1b[0m: Run script without flags \'c\' or \'case\' to enable                  ")
         print()
         print("Reading data from files                                                                    ", end="\r")
 
@@ -512,13 +519,13 @@ def main():
         print("\x1b[31m*MULTIPROCESSING DISABLED OR UNAVAILABLE: Run script without flags to enable\x1b[0m               ")
         print("\x1b[31m**not available if system only has 1 processor\x1b[0m                                             \n")
         if USE_STR_CONVERSION:
-            print("\x1b[32m*AUTO NUMBER CONVERSION ENABLED\x1b[0m: Run script with flag \'noconvert\' or \'nc\' to disable            \n")
+            print("\x1b[32m*AUTO NUMBER CONVERSION ENABLED\x1b[0m: Run script with flag \'noconvert\' or \'nc\' to disable            ")
         else:
-            print("\x1b[31m*AUTO NUMBER CONVERSION DISABLED\x1b[0m: Run script without flags to enable                     \n")
+            print("\x1b[31m*AUTO NUMBER CONVERSION DISABLED\x1b[0m: Run script without flags \'noconvert\' or \'nc\' to enable                     ")
         if USE_CASE_INSENSITIVE:
-            print("\x1b[32m*CASE INSENSITIVITY ENABLED\x1b[0m: Run script with flag \'c\' or \'case\' to disable            \n")
+            print("\x1b[32m*CASE INSENSITIVITY ENABLED\x1b[0m: Run script with flag \'c\' or \'case\' to disable                ")
         else:
-            print("\x1b[31m*CASE INSENSITIVITY DISABLED\x1b[0m: Run script without flags to enable                     \n")
+            print("\x1b[31m*CASE INSENSITIVITY DISABLED\x1b[0m: Run script without flags \'c\' or \'case\' to enable                         ")
         
         # Read File 1 into a Pandas DataFrame object
         doc1 = read_table_series(file1, extension1, "Reading data from file 1                                                                   ")
@@ -567,13 +574,13 @@ def main():
         raw_idx1: list[int] = []
         raw_yes1 = 0
         raw_no1 = 0
-        raw_yes1, raw_no1, raw_idx1 = row_comparison(rows1_str, rows2_str, "Raw Row Comparison - Compare Table 1 with Table 2                                          ")
+        raw_yes1, raw_no1, raw_idx1 = row_comparison(rows1_str, rows2_str, "Raw Row Comparison - Compare Table 1 with Table 2: ")
 
         # Find number of rows from raw document 2 that exist in raw document 1
         raw_idx2: list[int] = []
         raw_yes2 = 0
         raw_no2 = 0
-        raw_yes2, raw_no2, raw_idx2 = row_comparison(rows2_str, rows1_str, "Raw Row Comparison - Compare Table 2 with Table 1                                          ")
+        raw_yes2, raw_no2, raw_idx2 = row_comparison(rows2_str, rows1_str, "Raw Row Comparison - Compare Table 2 with Table 1: ")
 
         # Get columns that exist in both tables and order alphabetically without duplicates
         same_columns: list[str] = sorted(list(set(cols1) & set(cols2)))
@@ -639,7 +646,7 @@ def main():
             #     else:
             #         swap_no1 += 1
             #         swap_idx1.append(i)
-            swap_yes1, swap_no1, swap_idx1 = row_comparison(rows1_swap_str, rows2_swap_str, "Reordered Row Comparison - Compare Table 1 with Table 2                                ")
+            swap_yes1, swap_no1, swap_idx1 = row_comparison(rows1_swap_str, rows2_swap_str, "Reordered Row Comparison - Compare Table 1 with Table 2: ")
 
             print("Reordered Row Comparison - Compare Table 2 with Table 1                                ", end="\r")
             # Find number of rows from reordered document 2 that exist in reordered document 1
@@ -649,7 +656,7 @@ def main():
             #     else:
             #         swap_no2 += 1
             #         swap_idx2.append(i)
-            swap_yes2, swap_no2, swap_idx2 = row_comparison(rows2_swap_str, rows1_swap_str, "Reordered Row Comparison - Compare Table 1 with Table 2                                ")
+            swap_yes2, swap_no2, swap_idx2 = row_comparison(rows2_swap_str, rows1_swap_str, "Reordered Row Comparison - Compare Table 1 with Table 2: ")
                     
         else:
             print("No shared columns found                                                                ", end="\r")
